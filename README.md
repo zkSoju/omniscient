@@ -1,6 +1,11 @@
-# omniscient • [![tests](https://github.com/zksoju/omniscient/actions/workflows/tests.yml/badge.svg)](https://github.com/zksoju/omniscient/actions/workflows/tests.yml) [![lints](https://github.com/abigger87/femplate/actions/workflows/lints.yml/badge.svg)](https://github.com/zksoju/omniscient/actions/workflows/lints.yml) ![GitHub](https://img.shields.io/github/license/zksoju/omniscient) ![GitHub package.json version](https://img.shields.io/github/package-json/v/zksoju/omniscient)
+# omniscient • [![tests](https://github.com/zksoju/omniscient/actions/workflows/tests.yml/badge.svg)](https://github.com/zksoju/omniscient/actions/workflows/tests.yml) [![lints](https://github.com/zksoju/omniscient/actions/workflows/lints.yml/badge.svg)](https://github.com/zksoju/omniscient/actions/workflows/lints.yml) ![GitHub](https://img.shields.io/github/license/zksoju/omniscient) ![GitHub package.json version](https://img.shields.io/github/package-json/v/zksoju/omniscient)
 
 Interactible Cross-chain ERC721 Implementation
+
+## Overview
+
+`Omniscient` is deployed on Rinkeby at `[0x683f4aa38232aebc69f117a9250b7eb65796426d](https://rinkeby.etherscan.io/address/0x683f4aa38232aebc69f117a9250b7eb65796426d)`
+`Everest` is deployed on Fuji at `[0x11077f362979edc844549cf86dfdf28c7cc77cfb](https://testnet.snowtrace.io/address/0x11077f362979edc844549cf86dfdf28c7cc77cfb)`
 
 ## Blueprint
 
@@ -15,8 +20,9 @@ src
 │  └─ LzApp — Standard template contract for interacting with LayerZero messaging protocol
 │  └─ NonblockingLzApp — Non-blocking implementation of LzApp
 ├─ tests
-│  └─ Greeter.t — "Greeter Tests"
-└─ Greeter — "A Minimal Greeter Contract"
+│  └─ ...
+└─ Omniscient — ERC721 Contract that listens for LayerZero messages
+└─ Everest — Omniscient ownership manager contract that lives on a different chain
 ```
 
 ## Development
