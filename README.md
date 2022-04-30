@@ -1,32 +1,19 @@
-<img align="right" width="150" height="150" top="100" src="./assets/readme.jpg">
+# omniscient • [![tests](https://github.com/zksoju/omniscient/actions/workflows/tests.yml/badge.svg)](https://github.com/zksoju/omniscient/actions/workflows/tests.yml) [![lints](https://github.com/abigger87/femplate/actions/workflows/lints.yml/badge.svg)](https://github.com/zksoju/omniscient/actions/workflows/lints.yml) ![GitHub](https://img.shields.io/github/license/zksoju/omniscient) ![GitHub package.json version](https://img.shields.io/github/package-json/v/zksoju/omniscient)
 
-# femplate • [![tests](https://github.com/abigger87/femplate/actions/workflows/tests.yml/badge.svg)](https://github.com/abigger87/femplate/actions/workflows/tests.yml) [![lints](https://github.com/abigger87/femplate/actions/workflows/lints.yml/badge.svg)](https://github.com/abigger87/femplate/actions/workflows/lints.yml) ![GitHub](https://img.shields.io/github/license/abigger87/femplate)  ![GitHub package.json version](https://img.shields.io/github/package-json/v/abigger87/femplate)
-
-
-Robust Template for Foundry Projects.
-
-## Getting Started
-
-Click `use this template` on [Github](https://github.com/abigger87/femplate) to create a new repository with this repo as the initial state.
-
-Or, if your repo already exists, run:
-```sh
-forge init --template https://github.com/abigger87/femplate
-git submodule update --init --recursive
-forge install
-```
-
-Run `make rename` to rename all instances of `femplate` with the name of your project/repository.
+Interactible Cross-chain ERC721 Implementation
 
 ## Blueprint
 
 ```ml
 lib
-├─ ds-test — https://github.com/dapphub/ds-test
 ├─ forge-std — https://github.com/brockelmore/forge-std
+├─ LayerZero — https://github.com/LayerZero-Labs/LayerZero
+├─ openzeppelin-contracts — https://github.com/openzeppelin-contracts
 ├─ solmate — https://github.com/Rari-Capital/solmate
-├─ clones-with-immutable-args — https://github.com/wighawag/clones-with-immutable-args
 src
+├─ lzApp
+│  └─ LzApp — Standard template contract for interacting with LayerZero messaging protocol
+│  └─ NonblockingLzApp — Non-blocking implementation of LzApp
 ├─ tests
 │  └─ Greeter.t — "Greeter Tests"
 └─ Greeter — "A Minimal Greeter Contract"
@@ -34,8 +21,8 @@ src
 
 ## Development
 
-
 **Setup**
+
 ```bash
 make
 # OR #
@@ -43,11 +30,13 @@ make setup
 ```
 
 **Building**
+
 ```bash
 make build
 ```
 
 **Testing**
+
 ```bash
 make test
 ```
@@ -69,6 +58,7 @@ NOTE: these scripts will prompt you for the contract name and deployed addresses
 See the official Foundry installation [instructions](https://github.com/gakonst/foundry/blob/master/README.md#installation).
 
 Then, install the [foundry](https://github.com/gakonst/foundry) toolchain installer (`foundryup`) with:
+
 ```bash
 curl -L https://foundry.paradigm.xyz | bash
 ```
@@ -78,6 +68,7 @@ anytime you need to get the latest `forge` or `cast` binaries,
 you can run `foundryup`.
 
 So, simply execute:
+
 ```bash
 foundryup
 ```
@@ -106,14 +97,14 @@ For a full list of configuration options, see the Foundry [configuration documen
 
 ## Acknowledgements
 
-- [femplate](https://github.com/abigger87/femplate)
-- [foundry](https://github.com/gakonst/foundry)
-- [solmate](https://github.com/Rari-Capital/solmate)
-- [forge-std](https://github.com/brockelmore/forge-std)
-- [clones-with-immutable-args](https://github.com/wighawag/clones-with-immutable-args).
-- [foundry-toolchain](https://github.com/onbjerg/foundry-toolchain) by [onbjerg](https://github.com/onbjerg).
-- [forge-template](https://github.com/FrankieIsLost/forge-template) by [FrankieIsLost](https://github.com/FrankieIsLost).
-- [Georgios Konstantopoulos](https://github.com/gakonst) for [forge-template](https://github.com/gakonst/forge-template) resource.
+-   [femplate](https://github.com/abigger87/femplate)
+-   [foundry](https://github.com/gakonst/foundry)
+-   [solmate](https://github.com/Rari-Capital/solmate)
+-   [forge-std](https://github.com/brockelmore/forge-std)
+-   [clones-with-immutable-args](https://github.com/wighawag/clones-with-immutable-args).
+-   [foundry-toolchain](https://github.com/onbjerg/foundry-toolchain) by [onbjerg](https://github.com/onbjerg).
+-   [forge-template](https://github.com/FrankieIsLost/forge-template) by [FrankieIsLost](https://github.com/FrankieIsLost).
+-   [Georgios Konstantopoulos](https://github.com/gakonst) for [forge-template](https://github.com/gakonst/forge-template) resource.
 
 ## Disclaimer
 
