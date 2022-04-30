@@ -22,11 +22,21 @@ contract OmniscientTest is Test {
     uint16 constant RINKEBY_CHAIN_ID = 10001;
     uint16 constant FUJI_CHAIN_ID = 10006;
 
+    event MessageFailed(
+        uint16 _srcChainId,
+        bytes _srcAddress,
+        uint64 _nonce,
+        bytes _payload
+    );
+
     function setUp() public {
         console.log(unicode"🧪 Testing Omniscient...");
 
         srcEndpoint = new LZEndpointMock(FUJI_CHAIN_ID);
         dstEndpoint = new LZEndpointMock(RINKEBY_CHAIN_ID);
+
+        vm.label(address(srcEndpoint), "LZ Fuji Endpoint");
+        vm.label(address(dstEndpoint), "LZ Rinkeby Endpoint");
 
         everest = new Everest(address(srcEndpoint));
         omniscient = new Omniscient(address(dstEndpoint));
@@ -52,20 +62,25 @@ contract OmniscientTest is Test {
         assertEq(address(omniscient.lzEndpoint()), address(dstEndpoint));
     }
 
-    function testMintAndUpdate() public {
+    function testTransfer() public {
         // Mint omniscient nft on ethereum
         startHoax(address(1337), address(1337));
         omniscient.mint();
         assertEq(omniscient.ownerOf(0), address(1337));
 
+        // Set approval for omniscient to make internal calls
+        omniscient.setApprovalForAll(address(omniscient), true);
+
         // Send message to update ownership to layer zero from everest on avalanche
         everest.transferOwnership(RINKEBY_CHAIN_ID, address(0xBEEF), 0);
         assertEq(omniscient.ownerOf(0), address(0xBEEF));
 
+        vm.stopPrank();
+
         console.log(unicode"✅ Update ownership tests passed!");
     }
 
-    function testMintAndUpdateNotMinted() public {
+    function testTransferNotMinted() public {
         startHoax(address(1337), address(1337));
 
         // Send a failing message which gets stored in failed messages mapping
@@ -77,16 +92,60 @@ contract OmniscientTest is Test {
         assertEq(omniscient.ownerOf(0), address(1337));
 
         // Retry stored message
+        // When message is stored function is retried, it is executed as msg.sender
+        // No need for approval
         omniscient.retryMessage(
             FUJI_CHAIN_ID,
             abi.encodePacked(everest),
             1,
-            abi.encode(address(0xBEEF), 0)
+            abi.encode(address(1337), address(0xBEEF), 0)
         );
 
         // Verify token ownership
         assertEq(omniscient.ownerOf(0), address(0xBEEF));
 
+        vm.stopPrank();
+
         console.log(unicode"✅ Retry failed message tests passed!");
+    }
+
+    function testTransferNotOwner() public {
+        startHoax(address(1337), address(1337));
+
+        // Expect message to be stored and fail event to be emitted
+        // User is not allowed to transfer, token not yet minted
+        vm.expectEmit(false, false, false, true);
+
+        emit MessageFailed(
+            10006,
+            abi.encodePacked(address(everest)),
+            1,
+            abi.encode(address(1337), address(0xBEEF), 0)
+        );
+
+        everest.transferOwnership(RINKEBY_CHAIN_ID, address(0xBEEF), 0);
+
+        // Mint the token
+        omniscient.mint();
+        assertEq(omniscient.ownerOf(0), address(1337));
+
+        vm.stopPrank();
+
+        startHoax(address(420), address(420));
+
+        // Expect message to be stored and fail event to be emitted
+        // User is not allowed to transfer
+        vm.expectEmit(false, false, false, true);
+
+        emit MessageFailed(
+            10006,
+            abi.encodePacked(address(everest)),
+            2,
+            abi.encode(address(420), address(0xBEEF), 0)
+        );
+
+        everest.transferOwnership(RINKEBY_CHAIN_ID, address(0xBEEF), 0);
+
+        console.log(unicode"✅ Expect message failure tests passed!");
     }
 }

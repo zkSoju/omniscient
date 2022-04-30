@@ -8,16 +8,30 @@ import {NonblockingLzApp} from "./lzApp/NonblockingLzApp.sol";
 /// @notice Contract lives on Avalanche.
 /// @author zkSoju
 contract Everest is NonblockingLzApp {
+    /// :::::::::::::::::::::::  EVENTS  ::::::::::::::::::::::: ///
+
+    event SendMessage(
+        address indexed from,
+        bytes indexed payload,
+        address indexed to,
+        uint256 tokenId,
+        uint64 nonce
+    );
+
     constructor(address endpoint) NonblockingLzApp(endpoint) {}
 
     function transferOwnership(
         uint16 chainId,
-        address who,
+        address to,
         uint256 tokenId
     ) public payable {
-        bytes memory payload = abi.encode(who, tokenId);
+        bytes memory payload = abi.encode(msg.sender, to, tokenId);
 
         _lzSend(chainId, payload, payable(msg.sender), address(0x0), bytes(""));
+
+        uint64 nonce = lzEndpoint.getOutboundNonce(chainId, address(this));
+
+        emit SendMessage(msg.sender, payload, to, tokenId, nonce);
     }
 
     function _nonblockingLzReceive(

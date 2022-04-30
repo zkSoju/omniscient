@@ -14,6 +14,16 @@ contract Omniscient is NonblockingLzApp, ERC721 {
     /// @notice Throw to when trying to update owner when token is not minted.
     error NotMinted();
 
+    /// :::::::::::::::::::::::  EVENTS  ::::::::::::::::::::::: ///
+
+    event ReceiveMessage(
+        address indexed from,
+        bytes indexed payload,
+        address indexed to,
+        uint256 tokenId,
+        uint64 nonce
+    );
+
     /// :::::::::::::::::::::::  STORAGE  ::::::::::::::::::::::: ///
 
     /// @notice Counter for total received messages from other chains.
@@ -31,36 +41,31 @@ contract Omniscient is NonblockingLzApp, ERC721 {
     {}
 
     /// @notice Overrides functionality in lzReceive from LzApp.
+    /// @dev Loads 20 bytes for EVM based chains, may differ for other chains
     function _nonblockingLzReceive(
         uint16 chainId,
         bytes memory source,
-        uint64,
+        uint64 nonce,
         bytes memory payload
     ) internal virtual override {
+        _beforeReceive(chainId, source, payload);
+
         address sourceAddress;
         assembly {
             sourceAddress := mload(add(source, 20))
         }
+
         getRemoteCounter[sourceAddress]++;
         messageCounter++;
 
-        (address who, uint256 tokenId) = abi.decode(
+        (address from, address to, uint256 tokenId) = abi.decode(
             payload,
-            (address, uint256)
+            (address, address, uint256)
         );
 
-        _transferOwnership(chainId, who, tokenId);
-    }
+        emit ReceiveMessage(from, payload, to, tokenId, nonce);
 
-    /// @notice Transfers the ownership of the token to the new address
-    function _transferOwnership(
-        uint16,
-        address who,
-        uint256 tokenId
-    ) internal {
-        address owner = ownerOf[tokenId];
-        if (owner == address(0)) revert NotMinted();
-        ownerOf[tokenId] = who;
+        _afterReceive(chainId, from, to, tokenId);
     }
 
     function mint() public {
@@ -75,4 +80,22 @@ contract Omniscient is NonblockingLzApp, ERC721 {
         override
         returns (string memory)
     {}
+
+    function _beforeReceive(
+        uint16,
+        bytes memory,
+        bytes memory
+    ) internal virtual {}
+
+    /// @notice Transfers the ownership of the token to the new address.
+    /// @dev Only executable internally by providing approval to this contract
+    /// or when retrying the message as owner.
+    function _afterReceive(
+        uint16,
+        address from,
+        address to,
+        uint256 tokenId
+    ) internal virtual {
+        transferFrom(from, to, tokenId);
+    }
 }
