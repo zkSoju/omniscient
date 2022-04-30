@@ -58,7 +58,7 @@ contract Omniscient is NonblockingLzApp, ERC721 {
         address who,
         uint256 tokenId
     ) internal {
-        if (ownerOf[tokenId] == address(0)) revert NotMinted();
+        if ((owner = ownerOf[tokenId]) == address(0)) revert NotMinted();
         ownerOf[tokenId] = who;
     }
 
