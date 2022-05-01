@@ -8,11 +8,6 @@ import {NonblockingLzApp} from "./lzApp/NonblockingLzApp.sol";
 /// @notice Interactible Cross-chain ERC721 implementation
 /// @author zkSoju
 contract Omniscient is NonblockingLzApp, ERC721 {
-    /// :::::::::::::::::::::::  ERROR  ::::::::::::::::::::::: ///
-
-    /// @notice Throw to when trying to update owner when token is not minted.
-    error NotMinted();
-
     /// :::::::::::::::::::::::  EVENTS  ::::::::::::::::::::::: ///
 
     event ReceiveMessage(
