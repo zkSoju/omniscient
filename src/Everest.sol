@@ -20,6 +20,23 @@ contract Everest is NonblockingLzApp {
 
     constructor(address endpoint) NonblockingLzApp(endpoint) {}
 
+    function estimateFees(
+        uint16 chainId,
+        address to,
+        uint256 tokenId
+    ) external view returns (uint256) {
+        (uint256 fees, ) = lzEndpoint.estimateFees(
+            chainId,
+            to,
+            abi.encode(msg.sender, to, tokenId),
+            false,
+            bytes("")
+        );
+
+        return fees;
+    }
+
+    /// @notice Sends LayerZero message to transfer ownership on another chain
     function transferOwnership(
         uint16 chainId,
         address to,
@@ -27,7 +44,13 @@ contract Everest is NonblockingLzApp {
     ) public payable {
         bytes memory payload = abi.encode(msg.sender, to, tokenId);
 
-        _lzSend(chainId, payload, payable(msg.sender), address(0x0), bytes(""));
+        _lzSend(
+            chainId,
+            payload,
+            payable(msg.sender),
+            address(0x0),
+            abi.encodePacked(uint16(1), uint256(200000))
+        );
 
         uint64 nonce = lzEndpoint.getOutboundNonce(chainId, address(this));
 
