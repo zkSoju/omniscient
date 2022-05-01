@@ -4,9 +4,9 @@ Interactible Cross-chain ERC721 Implementation
 
 ## Overview
 
-`Omniscient` is deployed on Rinkeby at [`0x683f4aa38232aebc69f117a9250b7eb65796426d`](https://rinkeby.etherscan.io/address/0x683f4aa38232aebc69f117a9250b7eb65796426d)
+`Omniscient` is deployed on Rinkeby at [`0x04f738ffba458226f1d6ea50db2a034778834cb4`](https://rinkeby.etherscan.io/address/0x04f738ffba458226f1d6ea50db2a034778834cb4)
 
-`Everest` is deployed on Fuji at [`0x11077f362979edc844549cf86dfdf28c7cc77cfb`](https://testnet.snowtrace.io/address/0x11077f362979edc844549cf86dfdf28c7cc77cfb)
+`Everest` is deployed on Fuji at [`0x37e7176ad09232988d3802ac15cba2fd66ca8562`](https://testnet.snowtrace.io/address/0x37e7176ad09232988d3802ac15cba2fd66ca8562)
 
 ## Blueprint
 
