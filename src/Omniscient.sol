@@ -5,8 +5,7 @@ import {ERC721} from "@solmate/tokens/ERC721.sol";
 import {NonblockingLzApp} from "./lzApp/NonblockingLzApp.sol";
 
 /// @title Omniscient
-/// @notice Omnichain ERC721 Token.
-/// @notice Contract lives on Ethereum.
+/// @notice Interactible Cross-chain ERC721 implementation
 /// @author zkSoju
 contract Omniscient is NonblockingLzApp, ERC721 {
     /// :::::::::::::::::::::::  ERROR  ::::::::::::::::::::::: ///
